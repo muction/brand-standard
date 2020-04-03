@@ -1,5 +1,5 @@
 {
-    "name": "brand/standard",
+    "name": "laravel-brand/standard",
     "description": "one standard brand system api",
     "type": "project",
     "license": "MIT",
