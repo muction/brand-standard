@@ -1,0 +1,19 @@
+{
+    "name": "brand/standard",
+    "description": "one standard brand system api",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "muction",
+            "email": "muction@yeah.net"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "./Src/Helper.php"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
