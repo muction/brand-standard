@@ -45,7 +45,6 @@ class BrandServiceProvider extends ServiceProvider
         $this->mergeConfigFrom( __DIR__ ."/Config/config.php" , 'brand');
         $this->loadRoutesFrom( __DIR__ ."/Route.php");
         $this->loadViewsFrom( __DIR__."/Views/" ,'brand' );
-
         $this->registryRouteMiddleware();
     }
 
