@@ -1,17 +1,19 @@
 <?php
 namespace Brand\Standard\Controllers;
-
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Validator;
 use Stars\Permission\Entity\StarsUser;
+use Validator;
 
-class AuthController extends BaseController
+class AdminController extends BrandStandardController
 {
-    use ResponseApi;
-
-    public function login(Request $request , StarsUser $starsUser ){
+    /**
+     * 创建用户
+     * @param Request $request
+     * @param StarsUser $starsUser
+     * @return mixed
+     */
+    public function storageUser(Request $request, StarsUser $starsUser){
 
         $validator= Validator::make( $request->all(), [
             'username'=>'required',
@@ -22,17 +24,10 @@ class AuthController extends BaseController
             ]
         );
         if($validator->fails()){
-           return $this->responseValidatorError( $validator->errors() );
+            return $this->responseValidatorError( $validator->errors() );
         }
         $username = $request->input('username') ;
         $password = $request->input('password');
-        $info = $starsUser->detail(['username'=>$username ,'status'=>1]);
-        if(!$info|| !Hash::check( $password , $info->password ) ){
-            return $this->responseError();
-        }
-
-        return $info;
+        return $starsUser->createUser( $username, Hash::make( $password) , 1 );
     }
-
-
 }

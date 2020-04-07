@@ -15,5 +15,7 @@
         ]
     },
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "laravel-stars/permission": "^1.1"
+    }
 }
