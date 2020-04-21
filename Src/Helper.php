@@ -1,4 +1,8 @@
 <?php
-function test(){
-    dump("test helper");
+
+if(!file_exists('ddd')){
+    function xx( ...$d ){
+        print_r( $d );
+        exit;
+    }
 }

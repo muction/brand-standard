@@ -2,7 +2,7 @@
 namespace Brand\Standard\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Stars\Permission\Entity\StarsUser;
+use Stars\Permission\Entity\RbacUser;
 use Validator;
 
 class AdminController extends BrandStandardController
@@ -10,10 +10,10 @@ class AdminController extends BrandStandardController
     /**
      * 创建用户
      * @param Request $request
-     * @param StarsUser $starsUser
+     * @param RbacUser $starsUser
      * @return mixed
      */
-    public function storageUser(Request $request, StarsUser $starsUser){
+    public function storageUser(Request $request, RbacUser $starsUser){
 
         $validator= Validator::make( $request->all(), [
             'username'=>'required',
