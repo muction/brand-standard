@@ -11,7 +11,10 @@
     "autoload": {
         "files": [
             "./Src/Helper.php"
-        ]
+        ],
+        "psr-4": {
+            "Brand\\Standard\\" : "./Src"
+        }
     },
     "minimum-stability": "stable",
     "require": {
