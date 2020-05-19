@@ -2,11 +2,12 @@
 namespace Brand\Standard\Service;
 
 use Rbac\Standard\Entity\RbacGroup;
+use Rbac\Standard\Entity\RbacPermission;
 use Rbac\Standard\Entity\RbacRole;
 use Illuminate\Http\Request;
 
 
-class RoleService
+class PermissionService
 {
     /**
      * 分页
@@ -15,7 +16,7 @@ class RoleService
      */
     public function index( Request $request ){
 
-        return RbacRole::orderByDesc('updated_at')
+        return RbacPermission::orderByDesc('updated_at')
             ->paginate( $request->input('size', 20 ) );
     }
 
@@ -42,10 +43,11 @@ class RoleService
      */
     private function create( Request $request ){
 
+        $type = $request->input('type') ;
         $name = $request->input('name') ;
         $displayName = $request->input('display_name') ;
-        $rbacRole = new RbacRole();
-        return $rbacRole->storage( $name , $displayName );
+        $rbacPermission = new RbacPermission();
+        return $rbacPermission->storage( $type , $name , $displayName );
     }
 
     /**

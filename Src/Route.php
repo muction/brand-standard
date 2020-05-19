@@ -21,6 +21,7 @@ Route::group([ 'middleware'=>'brand.middleware' ,'prefix'=>'api/standard/' ,'nam
         Route::get('roles' , 'AdminController@role')-> name( 'standard.admin.role');
         Route::post('roles' , 'AdminController@roleStorage')-> name( 'standard.admin.role.storage');
         Route::post('roles/{id}' , 'AdminController@roleModify')-> name( 'standard.admin.role.modify');
+        Route::post('roles/bind/permissions/{id}' , 'AdminController@roleBindPermission')-> name( 'standard.admin.role.bind.permissions');
         Route::post('rm/roles/{id}' , 'AdminController@roleRemove')-> name( 'standard.admin.role.remove');
 
 

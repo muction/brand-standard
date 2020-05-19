@@ -5,6 +5,7 @@ use Brand\Standard\Requests\RbacBranchRequest;
 use Brand\Standard\Requests\RbacRoleRequest;
 use Brand\Standard\Service\AdminService;
 use Brand\Standard\Service\BranchService;
+use Brand\Standard\Service\PermissionService;
 use Brand\Standard\Service\RoleService;
 use Illuminate\Http\Request;
 
@@ -170,14 +171,30 @@ class AdminController extends Controller
         );
     }
 
+    /**
+     * 角色绑定Group
+     * @param Request $request
+     * @param RoleService $roleService
+     * @param $roleId
+     * @return array
+     * @throws \Exception
+     */
     public function roleBindPermission( Request $request , RoleService $roleService , $roleId ){
         return $this->responseSuccess(
-            $roleService->bindPermission( $roleId )
+            $roleService->bindPermission( $request, $roleId )
         );
     }
 
-    // TODO 权限列表
-    public function permission(){
+    /**
+     * 权限列表
+     * @param Request $request
+     * @param PermissionService $permissionService
+     * @return array
+     */
+    public function permission(Request $request, PermissionService $permissionService){
 
+        return $this->responseSuccess(
+            $permissionService->index( $request )
+        );
     }
 }
