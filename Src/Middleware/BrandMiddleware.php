@@ -3,6 +3,7 @@
 namespace Brand\Standard\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,29 +19,30 @@ class BrandMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!in_array($request->route()->getName()  , config('starspermission.whiteRouteNameList'))){
-            //校验是否登录系统
-            $this->validRequest( $request );
+        $configWriteListRouteName = configStandard('white_list_route_name') ;
+        $requestRouteName =$request->route()->getName() ;
+        if( in_array( $requestRouteName ,$configWriteListRouteName ? $configWriteListRouteName : [] ) ){
+            \Log::info( 'request_write_list_route_name' , [$requestRouteName , $configWriteListRouteName]);
+        }else{
+            $request->offsetSet( 'loginUserInfo' ,
+                $this->isValidRequestToken( $request->header('Authorization') )
+            );
         }
-
-        //注入登录人基本信息
-        $request->offsetSet( 'loginUserInfo' , ['time'=>time()] );
-
         return $next($request);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * TODO 校验登录Token 是否有效： 无效（过期，无用户） 有效（有用户且未过期）
+     * @param $requestHeaderToken
+     * @return bool
      * @throws \Exception
      */
-    public function validRequest( $request ){
-        $requestHeaderToken= $request->header('token');
-        if( !$requestHeaderToken){
-            throw new \Exception('非法请求');
-        }elseif ( $requestHeaderToken && !tokenValidator($requestHeaderToken) ){
-            throw new \Exception("TOKEN无效");
-        }else{
+    private function isValidRequestToken( $requestHeaderToken ){
 
+        if(!$requestHeaderToken || $useInfo= !Redis::hgetAll( $requestHeaderToken )){
+            throw new \Exception( "无效的Token");
         }
+
+        return $useInfo;
     }
 }

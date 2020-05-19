@@ -1,33 +1,35 @@
 <?php
 namespace Brand\Standard\Controllers;
+use Brand\Standard\Requests\PostAdministrantorsRequest;
+use Brand\Standard\Service\LoginService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Stars\Permission\Entity\RbacUser;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
-class AdminController extends BrandStandardController
+/**
+ * 后台管理控制器
+ * Class AdminController
+ * @package Brand\Standard\Controllers
+ */
+class AdminController extends Controller
 {
-    /**
-     * 创建用户
-     * @param Request $request
-     * @param RbacUser $starsUser
-     * @return mixed
-     */
-    public function storageUser(Request $request, RbacUser $starsUser){
+    // TODO 管理员列表
+    public function administrators(){
 
-        $validator= Validator::make( $request->all(), [
-            'username'=>'required',
-            'password'=>'required'
-        ] , [
-                'username.required'=>'登录名必填',
-                'password.required'=>'密码必填'
-            ]
-        );
-        if($validator->fails()){
-            return $this->responseValidatorError( $validator->errors() );
-        }
-        $username = $request->input('username') ;
-        $password = $request->input('password');
-        return $starsUser->createUser( $username, Hash::make( $password) , 1 );
+    }
+
+    public function administratorsStorage(PostAdministrantorsRequest $request){
+
+    }
+    // TODO 部门列表
+    public function branch(){
+
+    }
+    // TODO 角色列表
+    public function role(){
+
+    }
+    // TODO 权限列表
+    public function permission(){
+
     }
 }

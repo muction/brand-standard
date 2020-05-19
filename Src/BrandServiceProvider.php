@@ -42,10 +42,14 @@ class BrandServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->mergeConfigFrom( __DIR__ ."/Config/config.php" , 'brand');
+        $this->mergeConfigFrom( __DIR__ . "/Config/brandStandard.php", 'brand');
         $this->loadRoutesFrom( __DIR__ ."/Route.php");
         $this->loadViewsFrom( __DIR__."/Views/" ,'brand' );
         $this->registryRouteMiddleware();
+
+        $this->publishes([
+            __DIR__ . '/Config/brandStandard.php' => config_path('brandStandard.php'),
+        ], 'brand-standard');
     }
 
     /**
@@ -57,4 +61,5 @@ class BrandServiceProvider extends ServiceProvider
             app('router')->aliasMiddleware( $alias , $class);
         }
     }
+
 }
