@@ -1,7 +1,11 @@
 <?php
 namespace Brand\Standard\Controllers;
 use Brand\Standard\Requests\PostAdministrantorsRequest;
+use Brand\Standard\Requests\RbacBranchRequest;
+use Brand\Standard\Requests\RbacRoleRequest;
 use Brand\Standard\Service\AdminService;
+use Brand\Standard\Service\BranchService;
+use Brand\Standard\Service\RoleService;
 use Illuminate\Http\Request;
 
 /**
@@ -66,14 +70,112 @@ class AdminController extends Controller
     }
 
 
-    // TODO 部门列表
-    public function branch(){
-
+    /**
+     * 部门列表
+     * @param Request $request
+     * @param BranchService $branchService
+     * @return array
+     */
+    public function branch( Request $request , BranchService $branchService ){
+        return $this->responseSuccess(
+            $branchService->index( $request )
+        );
     }
-    // TODO 角色列表
-    public function role(){
 
+    /**
+     * 新增
+     * @param RbacBranchRequest $request
+     * @param BranchService $branchService
+     * @return array
+     * @throws \Exception
+     */
+    public function branchStorage(RbacBranchRequest $request , BranchService $branchService  ){
+        return $this->responseSuccess(
+            $branchService->branchStorage( $request , 0)
+        );
     }
+
+    /**
+     * 修改
+     * @param RbacBranchRequest $request
+     * @param BranchService $branchService
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
+    public function branchModify( RbacBranchRequest $request , BranchService $branchService , $id  ){
+        return $this->responseSuccess(
+            $branchService->branchStorage( $request , $id )
+        );
+    }
+
+    /**
+     * @param BranchService $branchService
+     * @param $id
+     * @return array
+     */
+    public function branchRemove( BranchService $branchService ,$id ){
+        return $this->responseSuccess(
+            $branchService->remove( $id )
+        );
+    }
+
+
+    /**
+     * 角色列表
+     * @param Request $request
+     * @param RoleService $roleService
+     * @return array
+     */
+    public function role(Request $request , RoleService $roleService){
+        return $this->responseSuccess(
+            $roleService->index( $request )
+        );
+    }
+
+    /**
+     * @param RbacRoleRequest $request
+     * @param RoleService $roleService
+     * @return array
+     * @throws \Exception
+     */
+    public function roleStorage(RbacRoleRequest $request , RoleService $roleService){
+        return $this->responseSuccess(
+            $roleService->storage( $request , 0 )
+        );
+    }
+
+    /**
+     * @param RbacRoleRequest $request
+     * @param RoleService $roleService
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
+    public function roleModify(RbacRoleRequest $request , RoleService $roleService , $id ){
+        return $this->responseSuccess(
+            $roleService->storage( $request , $id )
+        );
+    }
+
+    /**
+     * 删除
+     * @param RoleService $roleService
+     * @param $id
+     * @return array
+     */
+    public function roleRemove(RoleService $roleService , $id ){
+        return $this->responseSuccess(
+            $roleService->remove( $id )
+        );
+    }
+
+    public function roleBindPermission( Request $request , RoleService $roleService , $roleId ){
+        return $this->responseSuccess(
+            $roleService->bindPermission( $roleId )
+        );
+    }
+
     // TODO 权限列表
     public function permission(){
 
