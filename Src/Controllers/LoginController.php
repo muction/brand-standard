@@ -1,8 +1,7 @@
 <?php
 namespace Brand\Standard\Controllers;
+use Brand\Standard\Requests\LoginRequest;
 use Brand\Standard\Service\LoginService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * 登录服务，返回Token
@@ -12,25 +11,15 @@ use Illuminate\Support\Facades\Validator;
 class LoginController extends Controller
 {
     /**
-     * @param Request $request
+     * @param LoginRequest $request
      * @param LoginService $loginService
      * @return array|void
      * @throws \Exception
      */
-    public function login( Request $request , LoginService $loginService ){
+    public function login( LoginRequest $request , LoginService $loginService ){
 
-        $validator= Validator::make( $request->all(), [
-            'username'=>'required',
-            'password'=>'required'
-        ] , [
-                'username.required'=>'登录名必填',
-                'password.required'=>'密码必填'
-            ]
-        );
-        if($validator->fails()){
-            return $this->responseValidatorError( $validator->errors() );
-        }
 
+        throw new \Exception("我这是异常内容");
         return $loginService->authLogin( $request->input('username') , $request->input('password') );
 
     }

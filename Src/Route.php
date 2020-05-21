@@ -1,7 +1,8 @@
 <?php
 
 //标准版本路由
-Route::group([ 'middleware'=>'brand.middleware' ,'prefix'=>'api/standard/' ,'namespace'=>'Brand\Standard\Controllers' ],
+
+Route::group([ 'middleware'=>'brand.middleware' ,'prefix'=> configStandard('route_prefix') ,'namespace'=>'Brand\Standard\Controllers' ],
     function(){
         Route::post( 'login' , 'LoginController@login')->name( 'standard.login' );
 

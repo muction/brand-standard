@@ -2,6 +2,7 @@
 
 namespace Brand\Standard;
 
+use Brand\Standard\Exceptions\BrandExceptionHandler;
 use Brand\Standard\Middleware\BrandMiddleware;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,8 +32,10 @@ class BrandServiceProvider extends ServiceProvider
         if($this->app->runningInConsole()){
             $this->commands( $this->commands );
         }
+        $this->registryExceptionHandler() ;
 
         $this->app->shouldSkipMiddleware();
+
     }
 
     /**
@@ -62,4 +65,14 @@ class BrandServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * 注册异常处理
+     */
+    protected function registryExceptionHandler(){
+
+        $this->app->singleton(
+            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+            Exceptions\BrandExceptionHandler::class
+        );
+    }
 }

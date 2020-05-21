@@ -30,10 +30,8 @@ class PermissionService
     public function storage( Request $request , $id ){
         if(!$id ){
             return $this->create(  $request );
-        }else{
-           return $this->modify( $request , $id );
         }
-
+        return $this->modify( $request , $id );
     }
 
     /**

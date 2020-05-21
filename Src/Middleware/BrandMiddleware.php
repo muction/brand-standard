@@ -19,25 +19,27 @@ class BrandMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $configWriteListRouteName = configStandard('white_list_route_name') ;
-        $requestRouteName =$request->route()->getName() ;
-        if( in_array( $requestRouteName ,$configWriteListRouteName ? $configWriteListRouteName : [] ) ){
-            \Log::info( 'request_write_list_route_name' , [$requestRouteName , $configWriteListRouteName]);
-        }else{
-            $request->offsetSet( 'loginUserInfo' ,
-                $this->isValidRequestToken( $request->header('Authorization') )
+
+        //注入RequestId
+        $request->offsetSet( 'RequestId' , md5( microtime(true). rand(1,9999 )) );
+
+        //非白名单请求
+        if( !in_array( $request->route()->getName()  ,configStandard('white_list_route_name') ) ){
+            $request->offsetSet( 'LoginUserInfo' ,
+                $this->getRequestUserInfo( $request->header('Authorization') )
             );
         }
+
         return $next($request);
     }
 
     /**
-     * TODO 校验登录Token 是否有效： 无效（过期，无用户） 有效（有用户且未过期）
+     * 校验登录Token 是否有效： 无效（过期，无用户） 有效（有用户且未过期）
      * @param $requestHeaderToken
      * @return bool
      * @throws \Exception
      */
-    private function isValidRequestToken( $requestHeaderToken ){
+    private function getRequestUserInfo( $requestHeaderToken ){
 
         if(!$requestHeaderToken || $useInfo= !Redis::hgetAll( $requestHeaderToken )){
             throw new \Exception( "无效的Token");
