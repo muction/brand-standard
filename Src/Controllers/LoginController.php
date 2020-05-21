@@ -2,6 +2,7 @@
 namespace Brand\Standard\Controllers;
 use Brand\Standard\Requests\LoginRequest;
 use Brand\Standard\Service\LoginService;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 登录服务，返回Token
@@ -17,9 +18,7 @@ class LoginController extends Controller
      * @throws \Exception
      */
     public function login( LoginRequest $request , LoginService $loginService ){
-
-
-        throw new \Exception("我这是异常内容");
+        
         return $loginService->authLogin( $request->input('username') , $request->input('password') );
 
     }

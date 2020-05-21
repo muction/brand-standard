@@ -1,4 +1,4 @@
-<?php namespace Brand\Standard\Requests;
+<?php namespace Brand\Standard\Response;
 
 use Brand\Standard\Exceptions\ExceptionResponseCode;
 use Illuminate\Support\MessageBag;
@@ -14,7 +14,7 @@ Trait ResponseTrait
      */
     public function responseSuccess( $data =[] , $msg= '操作成功' , $extra =[] ){
 
-        return $this->responseStructure( 200 ,ExceptionResponseCode::REQUEST_SUCCESS_CODE , $msg , $data ,$extra );
+        return $this->responseStructure( 200 ,Error::REQUEST_SUCCESS_CODE , $msg , $data ,$extra );
     }
 
     /**
@@ -25,7 +25,7 @@ Trait ResponseTrait
      * @param array $extra
      * @return array
      */
-    public function responseError( $data = [] , $message = '操作失败' , $errorCode= ExceptionResponseCode::REQUEST_FAIL_CODE ,$extra =[] ){
+    public function responseError( $data = [] , $message = '操作失败' , $errorCode= Error::REQUEST_FAIL_CODE ,$extra =[] ){
         return $this->responseStructure( 200 ,$errorCode , $message , $data , $extra );
 
     }
@@ -36,7 +36,7 @@ Trait ResponseTrait
      * @param int $errorCode
      * @return array
      */
-    public function responseValidatorError(MessageBag $error , $errorCode= ExceptionResponseCode::REQUEST_FAIL_CODE ){
+    public function responseValidatorError(MessageBag $error , $errorCode= Error::REQUEST_FAIL_CODE ){
         return $this->responseError( $error->toArray() , $errorCode );
     }
 
@@ -51,8 +51,8 @@ Trait ResponseTrait
      */
     private function responseStructure( $statusCode, $errorCode , $msg, $data ,$extra=[] ){
         return [
-            'status'=>$statusCode ,
-            'error'=> $errorCode,
+            'status_code'=>$statusCode ,
+            'error_code'=> $errorCode,
             'msg' => $msg ,
             'data'=> $data ,
             'extra'=> $extra,

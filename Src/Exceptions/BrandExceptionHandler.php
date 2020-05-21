@@ -3,7 +3,7 @@
 namespace Brand\Standard\Exceptions;
 
 use Brand\Standard\Exceptions\BrandApiRequestErrorException;
-use Brand\Standard\Requests\ResponseTrait;
+use Brand\Standard\Response\ResponseTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

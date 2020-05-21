@@ -2,7 +2,7 @@
 
 namespace Brand\Standard\Controllers;
 
-use Brand\Standard\Requests\ResponseTrait;
+use Brand\Standard\Response\ResponseTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;

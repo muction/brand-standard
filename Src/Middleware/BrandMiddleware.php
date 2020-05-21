@@ -21,7 +21,7 @@ class BrandMiddleware
     {
 
         //注入RequestId
-        $request->offsetSet( 'RequestId' , md5( microtime(true). rand(1,9999 )) );
+        $request->offsetSet( 'RequestId' , strtoupper( md5( microtime(true). rand(1,9999 )) ) );
 
         //非白名单请求
         if( !in_array( $request->route()->getName()  ,configStandard('white_list_route_name') ) ){

@@ -1,6 +1,7 @@
 <?php
 namespace Brand\Standard\Requests;
 
+use Brand\Standard\Response\ResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
