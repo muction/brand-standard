@@ -163,14 +163,24 @@ class AdminService
      */
     public static function loginUser( $token =""){
         $all= Redis::hgetall( $token ? $token : loginUserToken() );
-        if( isset($all['permissions']) && $all['permissions']){
-            $permissions = json_decode( $all['permissions'] , true );
-            $all['menu_names'] = array_column( $permissions['menu'] , 'name' );
-            $all['action_names'] = array_column( $permissions['action'] , 'name' );
-            $all['role_names'] = array_column( $permissions['roles'] , 'name' );
-            $all['permissions'] = $permissions;
+        if( isset($all['auth']) && $all['auth']){
+            $all['auth'] = json_decode($all['auth'], true );
         }
         return $all;
+    }
+
+    /**
+     * 解析Json权限
+     * @param $jsonPermissions
+     * @return array
+     */
+    public static function parseUserPermission(array $jsonPermissions ){
+        $all =[];
+        $all['menu_names'] = is_array($permissions['menu'] ) ? array_keys($permissions['menu'] ) : [];
+        $all['action_names'] = is_array($permissions['action']) ? array_keys($permissions['action'] ) : [];
+        $all['role_names'] = is_array($permissions['roles']) ? array_keys($permissions['roles'] ) :[];
+        $all['permissions'] = $permissions;
+        return $all ;
     }
 
     /**

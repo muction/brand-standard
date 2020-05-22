@@ -26,10 +26,10 @@ class LoginService
         }
         $user = $user->toArray();
         $user['token'] = makeToken( $user['username'] . $user['password'] , date('Y-m-d-H:i:s') );
-        $user['permissions'] = self::separateUserPermission( $user ) ;
+        $user['auth'] = self::separateUserPermission( $user ) ;
         unset($user['password'], $user['roles']);
         $hset= $user;
-        $hset['permissions'] = json_encode($hset['permissions']);
+        $hset['auth'] = json_encode($hset['auth']);
         if(Redis::hmset( $user['token'] , $hset )){
             Redis::expire( $user['token'] , configStandard('token_expire') );
             return $user;
@@ -55,16 +55,16 @@ class LoginService
 
         $permissions =[ 'menu'=>[] ,'action'=>[] ,'roles'=>[] ];
         foreach ($user['roles'] as $item ){
-            $permissions['roles'][]= ['displayName'=>$item ['display_name'] ,'name'=>$item ['name']];
+            $permissions['roles'][$item ['name']]= $item ['display_name'];
             foreach ($item['permissions'] as $er){
                 if( $er['type'] == PermissionService::PERMISSION_TYPE_MENU_ID ){
-                    $permissions['menu'][] = ['displayName'=>$er['display_name']  ,'name'=>$er['name']] ;
+                    $permissions['menu'][$er['name']] = $er['display_name'] ;
                 }elseif ( $er['type'] == PermissionService::PERMISSION_TYPE_ACTION_ID){
-                    $permissions['action'][] = ['displayName'=>$er['display_name']  ,'name'=>$er['name']] ;
+                    $permissions['action'][$er['name']] =$er['display_name']  ;
                 }
             }
         }
 
-        return $permissions;
+        return AdminService::parseUserPermission( $permissions );
     }
 }

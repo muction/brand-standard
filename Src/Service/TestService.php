@@ -27,6 +27,8 @@ class TestService
         if(!env('APP_DEBUG')){
             return [];
         }
+
+        dd( AdminService::loginUser($request->input('token')));
         return RbacPermission::orderBy('name','ASC')
             ->get(['id','type','name','display_name','status','created_at']);
     }
