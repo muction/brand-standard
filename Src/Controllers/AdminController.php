@@ -2,6 +2,7 @@
 namespace Brand\Standard\Controllers;
 use Brand\Standard\Requests\PostAdministrantorsRequest;
 use Brand\Standard\Requests\RbacBranchRequest;
+use Brand\Standard\Requests\RbacPermissionRequest;
 use Brand\Standard\Requests\RbacRoleRequest;
 use Brand\Standard\Service\AdminService;
 use Brand\Standard\Service\BranchService;
@@ -53,6 +54,8 @@ class AdminController extends Controller
      * @throws \Exception
      */
     public function administratorsModify(Request $request, AdminService $adminService , $userId ){
+
+        $adminService->userIsValidator( $request, $userId );
         return $this->responseSuccess(
             $adminService->adminStorage( $request , $userId )
         );
@@ -187,7 +190,7 @@ class AdminController extends Controller
 
     /**
      * 权限列表
-     * @param Request $request
+     * @param RbacPermissionRequest $request
      * @param PermissionService $permissionService
      * @return array
      */
@@ -195,6 +198,48 @@ class AdminController extends Controller
 
         return $this->responseSuccess(
             $permissionService->index( $request )
+        );
+    }
+
+
+    /**
+     * 新增权限
+     * @param PermissionService $permissionService
+     * @return array
+     * @throws \Exception
+     */
+    public function permissionStorage( RbacPermissionRequest $request , PermissionService $permissionService){
+
+        return $this->responseSuccess(
+            $permissionService->storage( $request ,0 )
+        );
+    }
+
+    /**
+     * 修改
+     * @param RbacPermissionRequest $request
+     * @param PermissionService $permissionService
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
+    public function permissionModify( RbacPermissionRequest $request , PermissionService $permissionService , $id){
+
+        return $this->responseSuccess(
+            $permissionService->storage( $request ,$id )
+        );
+    }
+
+    /**
+     * 删除
+     * @param PermissionService $permissionService
+     * @param $id
+     * @return array
+     */
+    public function permissionRemove( PermissionService $permissionService , $id){
+
+        return $this->responseSuccess(
+            $permissionService->remove( $id )
         );
     }
 }

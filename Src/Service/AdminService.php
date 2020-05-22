@@ -92,10 +92,15 @@ class AdminService
             $postBranch = $request->input('branch');
 
             $user->deleteGroups( null);
-            $user->bindGroups( $postBranch );
+            if($postBranch){
+                $user->bindGroups( $postBranch );
+            }
 
             $user->deleteRoles( null);
-            $user->bindRoles( $postRoles );
+
+            if($postRoles){
+                $user->bindRoles( $postRoles );
+            }
 
             DB::commit();
 
@@ -133,4 +138,85 @@ class AdminService
         }
     }
 
+    /**
+     * 验证用户有效性
+     * @param Request $request
+     * @param $id
+     * @return bool
+     * @throws \Exception
+     */
+    public function userIsValidator(Request $request , $id){
+        $user = RbacUser::with(['roles','groups'])->where('id' , $id)->first();
+        if(!$user){
+            throw new \Exception( "用户不存在");
+        }
+
+        if( !Hash::check( $request->input('old_password') , $user->password ) ){
+            throw new \Exception("原始密码错误");
+        }
+        return true ;
+    }
+
+    /**
+     * 获取登陆者信息
+     * @return mixed
+     */
+    public static function loginUser( $token =""){
+        $all= Redis::hgetall( $token ? $token : loginUserToken() );
+        if( isset($all['permissions']) && $all['permissions']){
+            $permissions = json_decode( $all['permissions'] , true );
+            $all['menu_names'] = array_column( $permissions['menu'] , 'name' );
+            $all['action_names'] = array_column( $permissions['action'] , 'name' );
+            $all['role_names'] = array_column( $permissions['roles'] , 'name' );
+            $all['permissions'] = $permissions;
+        }
+        return $all;
+    }
+
+    /**
+     * 是否有权限
+     * @param array|string $permission
+     * @return bool
+     */
+    public static function hasPermission( $permission ){
+
+        if($loginUserPermission=self::loginUser() ){
+            if(is_array($permission)){
+                return array_intersect( $permission, $loginUserPermission['action_names'] ) ? true : false;
+            }elseif ( is_string($permission)){
+                return in_array( $permission, $loginUserPermission['action_names'] );
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否授权某个角色
+     * @param array|string $role
+     * @return bool
+     */
+    public static function hasRole( $role ){
+        if($loginUserPermission=self::loginUser() ){
+            if(is_array($role)){
+                return array_intersect( $role, $loginUserPermission['role_names'] ) ? true : false;
+            }elseif ( is_string($role)){
+                return in_array( $role, $loginUserPermission['role_names'] );
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否可以操作
+     * @param string $permission
+     * @return bool
+     */
+    public static function can(string $permission ){
+
+        $loginUserPermission=self::loginUser();
+        if($loginUserPermission ){
+            return in_array( $permission, $loginUserPermission['action_names'] );
+        }
+        return false;
+    }
 }

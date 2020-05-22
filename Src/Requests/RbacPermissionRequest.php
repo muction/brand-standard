@@ -2,7 +2,7 @@
 namespace Brand\Standard\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Brand\Standard\Response\ResponseTrait;
 class RbacPermissionRequest extends FormRequest
 {
     use FailedValidationTrait ,ResponseTrait;
@@ -28,6 +28,8 @@ class RbacPermissionRequest extends FormRequest
             'type'=> 'required',
             'name'=> 'required',
             'display_name'=> 'required',
+            'parent_id'=> 'required' ,
+            'order'=> 'required' ,
         ];
     }
 
@@ -36,7 +38,9 @@ class RbacPermissionRequest extends FormRequest
         return [
             'type.required' => '权限类别必填' ,
             'name.required' => '权限名必填' ,
-            'display_name.required' => '权限名称必填'
+            'display_name.required' => '权限名称必填' ,
+            'parent_id.required'=>'父级别必选' ,
+            'order.required'=>'排序必须填写' ,
         ];
     }
 }

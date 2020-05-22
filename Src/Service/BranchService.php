@@ -1,6 +1,7 @@
 <?php
 namespace Brand\Standard\Service;
 
+use Brand\Standard\Requests\RbacBranchRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -31,22 +32,19 @@ class BranchService
      * @throws \Exception
      */
     public function branchStorage( Request $request , $id ){
-
-
         if(!$id ){
             return $this->create(  $request );
-        }else{
-           return $this->modify( $request , $id );
         }
+        return $this->modify( $request , $id );
 
     }
 
     /**
      * 新增一个
-     * @param Request $request
+     * @param RbacBranchRequest $request
      * @return mixed
      */
-    private function create( Request $request ){
+    private function create( RbacBranchRequest $request ){
 
         $name = $request->input('name') ;
         $displayName = $request->input('display_name') ;
@@ -55,12 +53,12 @@ class BranchService
     }
 
     /**
-     * @param Request $request
+     * @param RbacBranchRequest $request
      * @param int $id
      * @return bool
      * @throws \Exception
      */
-    private function modify( Request $request ,int $id ){
+    private function modify( RbacBranchRequest $request ,int $id ){
 
         $name = $request->input('name') ;
         $displayName = $request->input('display_name') ;

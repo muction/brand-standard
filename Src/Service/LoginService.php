@@ -18,35 +18,53 @@ class LoginService
 
         $user= RbacUser::with(['roles.permissions'=>function($query){
             $query->select('rbac_permissions.id','type','parent_id','name' ,'display_name' ,'order');
-        },'groups'])
+            }])
             ->where('username', $username)
             ->select(['username' ,'password' ,'status' ,'id'])->first();
         if(!$user || $user && !Hash::check( $password, $user->password )){
             throw new \Exception("用户名密码错误~");
         }
         $user = $user->toArray();
-        $user['token'] = self::makeUserLoginToken( $user['username'] , $user['password'] );
-        unset($user['password']);
-        //TODO 加入权限配置，菜单配置
-        $user['menus'] = RbacPermission::where( 'type',1)->orderByDesc('order')->get();
-
-
-
-        //设置为登录状态
-        if(Redis::hmset( $user['token'] , $user )){
+        $user['token'] = makeToken( $user['username'] . $user['password'] , date('Y-m-d-H:i:s') );
+        $user['permissions'] = self::separateUserPermission( $user ) ;
+        unset($user['password'], $user['roles']);
+        $hset= $user;
+        $hset['permissions'] = json_encode($hset['permissions']);
+        if(Redis::hmset( $user['token'] , $hset )){
+            Redis::expire( $user['token'] , configStandard('token_expire') );
             return $user;
         }
-
         return false;
     }
 
     /**
-     * 生成登录Token
-     * @param $username
-     * @param $password
-     * @return string
+     * 退出登录
+     * @param $token
+     * @return mixed
      */
-    public static function makeUserLoginToken( $username, $password ){
-        return strtoupper( md5( $username . $password ) ) ;
+    public function loginOut( $token ){
+
+        return Redis::del( $token);
+    }
+
+    /**
+     * 分离权限和菜单
+     * @param array $user
+     */
+    private static function separateUserPermission( array $user){
+
+        $permissions =[ 'menu'=>[] ,'action'=>[] ,'roles'=>[] ];
+        foreach ($user['roles'] as $item ){
+            $permissions['roles'][]= ['displayName'=>$item ['display_name'] ,'name'=>$item ['name']];
+            foreach ($item['permissions'] as $er){
+                if( $er['type'] == PermissionService::PERMISSION_TYPE_MENU_ID ){
+                    $permissions['menu'][] = ['displayName'=>$er['display_name']  ,'name'=>$er['name']] ;
+                }elseif ( $er['type'] == PermissionService::PERMISSION_TYPE_ACTION_ID){
+                    $permissions['action'][] = ['displayName'=>$er['display_name']  ,'name'=>$er['name']] ;
+                }
+            }
+        }
+
+        return $permissions;
     }
 }

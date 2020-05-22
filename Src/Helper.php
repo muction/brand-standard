@@ -13,10 +13,29 @@ if(!function_exists('configStandard')){
 }
 
 /**
- * 
+ * 请求标识
  */
 if( !function_exists( 'requestId') ){
     function requestId( $default =""){
         return request('RequestId' , $default);
+    }
+}
+
+/**
+ * 请求标识
+ */
+if( !function_exists( 'loginUserToken') ){
+    function loginUserToken(){
+        return request()->header('Authorization');
+    }
+}
+
+
+/**
+ * 生成MD5-token值
+ */
+if( !function_exists( "makeToken") ){
+    function makeToken( string $input , $salt = ""){
+        return strtoupper( md5( $input . $salt ) ) ;
     }
 }

@@ -2,6 +2,7 @@
 namespace Brand\Standard\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Brand\Standard\Response\ResponseTrait;
 
 class PostAdministrantorsRequest extends FormRequest
 {
