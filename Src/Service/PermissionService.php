@@ -29,7 +29,7 @@ class PermissionService
         return RbacPermission::orderByDesc('updated_at')
             ->paginate( $request->input('size', 20 ) );
     }
-    
+
     /**
      * 新增一个
      * @param Request $request
@@ -56,8 +56,9 @@ class PermissionService
         $displayName = $request->input('display_name') ;
         $parentId = $request->input('parent_id') ;
         $order = $request->input('order') ;
+        $summary = $request->input('summary') ;
         $rbacPermission = new RbacPermission();
-        return $rbacPermission->storage( $type , $name , $displayName ,$parentId , $order);
+        return $rbacPermission->storage( $type , $name , $displayName ,$parentId , $order , $summary);
     }
 
     /**
@@ -72,6 +73,7 @@ class PermissionService
         $parentId = $request->input('parent_id') ;
         $order = $request->input('order') ;
         $displayName = $request->input('display_name') ;
+        $summary = $request->input('summary') ;
         $rbacRole = new RbacPermission();
         $info = $rbacRole->info( $id );
         if(!$info){
@@ -81,6 +83,7 @@ class PermissionService
         $info->display_name = $displayName;
         $info->parent_id = $parentId;
         $info->order = $order;
+        $info->summary = $summary;
         $info->save();
         return $info;
     }

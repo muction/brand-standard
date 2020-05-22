@@ -171,10 +171,10 @@ class AdminService
 
     /**
      * 解析Json权限
-     * @param $jsonPermissions
+     * @param $permissions
      * @return array
      */
-    public static function parseUserPermission(array $jsonPermissions ){
+    public static function parseUserPermission(array $permissions ){
         $all =[];
         $all['menu_names'] = is_array($permissions['menu'] ) ? array_keys($permissions['menu'] ) : [];
         $all['action_names'] = is_array($permissions['action']) ? array_keys($permissions['action'] ) : [];
