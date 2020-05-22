@@ -39,3 +39,12 @@ if( !function_exists( "makeToken") ){
         return strtoupper( md5( $input . $salt ) ) ;
     }
 }
+
+/**
+ * 生成RequestId
+ */
+if( !function_exists( 'makeRequestId')){
+    function makeRequestId(){
+        return strtoupper( md5( microtime(true). rand(1,9999 )) ) ;
+    }
+}

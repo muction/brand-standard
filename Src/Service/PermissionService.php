@@ -29,18 +29,7 @@ class PermissionService
         return RbacPermission::orderByDesc('updated_at')
             ->paginate( $request->input('size', 20 ) );
     }
-
-    /**
-     * @return mixed
-     */
-    public function debugPermission(){
-
-        if(!env('APP_DEBUG')){
-            return [];
-        }
-        return RbacPermission::orderBy('name','ASC')->get(['id','type','name','display_name']);
-    }
-
+    
     /**
      * 新增一个
      * @param Request $request

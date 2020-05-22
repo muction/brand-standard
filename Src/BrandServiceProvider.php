@@ -12,7 +12,9 @@ class BrandServiceProvider extends ServiceProvider
      * 系统命令
      * @var array
      */
-    protected $commands = [];
+    protected $commands = [
+        Console\Commands\Permissions::class
+    ];
 
     /**
      * 系统中间件

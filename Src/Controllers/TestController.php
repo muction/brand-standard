@@ -9,6 +9,7 @@ use Brand\Standard\Service\BranchService;
 use Brand\Standard\Service\LoginService;
 use Brand\Standard\Service\PermissionService;
 use Brand\Standard\Service\RoleService;
+use Brand\Standard\Service\TestService;
 use Illuminate\Http\Request;
 
 /**
@@ -18,23 +19,16 @@ use Illuminate\Http\Request;
  */
 class TestController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request , TestService $testService ){
 
-        dd(
-            loginUserToken(), AdminService::loginUser(  $request->input('token'))
-        );
+        $action = $request->input('action' ,'test');
+
+        if( method_exists( $testService, $action) ){
+           return $this->responseSuccess(
+               $testService->$action( $request )
+           );
+        }
+
     }
 
-
-    /**
-     * debug 权限
-     * @param Request $request
-     * @param PermissionService $permissionService
-     */
-    public function debugPermission(Request $request, PermissionService $permissionService){
-
-        return $this->responseSuccess(
-            $permissionService->debugPermission( $request )
-        );
-    }
 }
