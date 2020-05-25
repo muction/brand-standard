@@ -1,6 +1,7 @@
 <?php
 namespace Brand\Standard\Service;
 
+use Brand\Standard\Response\Error;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Rbac\Standard\Entity\RbacPermission;
@@ -22,7 +23,7 @@ class LoginService
             ->where('username', $username)
             ->select(['username' ,'password' ,'status' ,'id'])->first();
         if(!$user || $user && !Hash::check( $password, $user->password )){
-            throw new \Exception("用户名密码错误~");
+            throw new \Exception(Error::APP_VALIDATOR_FAIL_MSG, Error::APP_VALIDATOR_FAIL_CODE );
         }
         $user = $user->toArray();
         $user['token'] = makeToken( $user['username'] . $user['password'] , date('Y-m-d-H:i:s') );

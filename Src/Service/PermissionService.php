@@ -1,6 +1,7 @@
 <?php
 namespace Brand\Standard\Service;
 
+use Brand\Standard\Exceptions\BrandNotFoundException;
 use Rbac\Standard\Entity\RbacGroup;
 use Rbac\Standard\Entity\RbacPermission;
 use Rbac\Standard\Entity\RbacRole;
@@ -77,7 +78,7 @@ class PermissionService
         $rbacRole = new RbacPermission();
         $info = $rbacRole->info( $id );
         if(!$info){
-            throw new  \Exception("角色没有找到");
+            throw new BrandNotFoundException();
         }
         $info->name = $name ;
         $info->display_name = $displayName;

@@ -1,6 +1,8 @@
 <?php
 namespace Brand\Standard\Service;
 
+use Brand\Standard\Exceptions\BrandNotFoundException;
+use Brand\Standard\Response\Error;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -118,12 +120,18 @@ class AdminService
      * @return bool
      */
     public function adminRemove( int $id ){
+
+        //不能本人删本人
+        if( $id == self::loginUser( 'id') ){
+            throw new \Exception(Error::APP_ULTRA_VIRES_MSG , Error::APP_ULTRA_VIRES_CODE);
+        }
+
         try{
             DB::beginTransaction();
 
             $user = RbacUser::with(['roles','groups'])->where('id' , $id)->first();
             if(!$user){
-                throw new \Exception( "用户不存在");
+                throw new BrandNotFoundException();
             }
             $user->deleteGroups( null);
             $user->deleteRoles( null);
@@ -146,13 +154,13 @@ class AdminService
      * @throws \Exception
      */
     public function userIsValidator(Request $request , $id){
-        $user = RbacUser::with(['roles','groups'])->where('id' , $id)->first();
-        if(!$user){
-            throw new \Exception( "用户不存在");
+        $userPassword = RbacUser::where('id' , $id)->value('password');
+        if(!$userPassword){
+            throw new BrandNotFoundException();
         }
 
-        if( !Hash::check( $request->input('old_password') , $user->password ) ){
-            throw new \Exception("原始密码错误");
+        if( !Hash::check( $request->input('old_password') , $userPassword ) ){
+            throw new \Exception(Error::APP_ORIGIN_PASSWORD_ERROR_MSG , Error::APP_ORIGIN_PASSWORD_ERROR_CODE );
         }
         return true ;
     }
@@ -161,11 +169,16 @@ class AdminService
      * 获取登陆者信息
      * @return mixed
      */
-    public static function loginUser( $token =""){
-        $all= Redis::hgetall( $token ? $token : loginUserToken() );
+    public static function loginUser( $key =null ){
+        $all= Redis::hgetall( loginUserToken() );
         if( isset($all['auth']) && $all['auth']){
             $all['auth'] = json_decode($all['auth'], true );
         }
+
+        if($key){
+            return isset($all[$key]) ? $all[$key] : null;
+        }
+
         return $all;
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Brand\Standard\Service;
 
+use Brand\Standard\Exceptions\BrandNotFoundException;
 use Brand\Standard\Requests\RbacBranchRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -65,7 +66,7 @@ class BranchService
         $rbacGroup = new RbacGroup();
         $info = $rbacGroup->info( $id );
         if(!$info){
-            throw new  \Exception("部门没有找到");
+            throw new BrandNotFoundException();
         }
         $info->name = $name ;
         $info->display_name = $displayName;

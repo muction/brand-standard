@@ -6,7 +6,7 @@ class Error
     //系统基础响应错误代码
     const REQUEST_SUCCESS_CODE = 0;  //请求成功
     const REQUEST_FAIL_CODE = 1; //请求失败
-    const APP_ERROR = 500 ; //
+    const APP_ERROR = 500; //
 
     //forbiddent
     const REQUEST_FORBIDDENT_CODE = 403;
@@ -27,7 +27,14 @@ class Error
 
     /** ----------------------------------------- 系统自定义错误 ----------------------------------------------------- **/
 
+    const APP_ULTRA_VIRES_MSG = '被拒绝操作，出现这个问题，大部分是由于系统限制了当前逻辑形态，如有疑问，请联系管理员~';
+    const APP_ULTRA_VIRES_CODE = 10000;
 
+    const APP_ORIGIN_PASSWORD_ERROR_MSG = '原始密码错误';
+    const APP_ORIGIN_PASSWORD_ERROR_CODE = 10001;
+
+    const APP_VALIDATOR_FAIL_MSG = '验证失败，请检查用户名密码';
+    const APP_VALIDATOR_FAIL_CODE = 10002;
 
 
 }
