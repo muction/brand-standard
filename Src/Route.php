@@ -40,5 +40,23 @@ Route::group([ 'middleware'=>'brand.middleware' ,'prefix'=> configStandard('rout
         Route::post('rm/permissions/{id}' , 'AdminController@permissionRemove')-> name( $perfix .'.permission.remove');
 
 
+        Route::post('category/brand' , 'CategoryController@categoryStorage')-> name( $perfix .'.category.storage.brand');
+        Route::post('category/brand/{id}' , 'CategoryController@categoryModify')-> name( $perfix .'.category.modify.brand');
+        Route::post('rm/category/brand/{id}' , 'CategoryController@categoryRemove')-> name( $perfix .'.category.remove.brand');
+
+        Route::post('brand/articles/{dataId}' , 'BrandArticleController@storage')-> name( $perfix .'.brand.storage.articles');
+        Route::post('brand/articles/{dataId}/{id}' , 'BrandArticleController@modify')-> name( $perfix .'.brand.modify.articles');
+        Route::post('rm/brand/articles/{dataId}/{id}' , 'BrandArticleController@remove')-> name( $perfix .'.brand.remove.articles');
+        Route::get('brand/articles/{dataId}' , 'BrandArticleController@index')-> name( $perfix .'.brand.index.articles');
+
+        //文件上传
+        Route::post('/attachments/upload/{client}' , 'AttachmentController@upload' )->name( $perfix. '.attachment.upload' );
+        Route::get('/attachments' , 'AttachmentController@index' )->name(  $perfix. '.attachment.index' );
+        Route::get('/attachments/manager' , 'AttachmentController@manager' )->name(  $perfix. '.attachment.manager' );
+        Route::get('/attachments/handle/cropper/{column}/{navId}/{menuId}/{bindId}/{attachmentId}' , 'AttachmentController@cropper' )->name(  $perfix. '.attachment.handle.cropper.page' );
+        Route::post('/attachments/handle/cropper' , 'AttachmentController@shear' )->name( $perfix.  '.attachment.handle.cropper' );
+        Route::get('/attachments/preview/{bindId}/{attachmentIds}' , 'AttachmentController@imgPreview')->name(  $perfix. '.attachment.img.preview' );
+
+
     }
 );

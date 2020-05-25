@@ -41,6 +41,18 @@ Trait ResponseTrait
     }
 
     /**
+     * @param $error
+     * @param $url
+     * @return array
+     */
+    public function responseKindUpload( $error, $url ){
+        return [
+            'error'=> $error ,
+            'url' => $url
+        ];
+    }
+
+    /**
      * 响应API结构体
      * @param $statusCode
      * @param $errorCode
