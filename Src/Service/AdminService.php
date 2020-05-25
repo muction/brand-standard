@@ -192,9 +192,9 @@ class AdminService
 
         if($loginUserPermission=self::loginUser() ){
             if(is_array($permission)){
-                return array_intersect( $permission, $loginUserPermission['action_names'] ) ? true : false;
+                return array_intersect( $permission, $loginUserPermission['auth']['action_names'] ) ? true : false;
             }elseif ( is_string($permission)){
-                return in_array( $permission, $loginUserPermission['action_names'] );
+                return in_array( $permission, $loginUserPermission['auth']['action_names'] );
             }
         }
         return false;
@@ -206,11 +206,11 @@ class AdminService
      * @return bool
      */
     public static function hasRole( $role ){
-        if($loginUserPermission=self::loginUser() ){
+        if( $loginUserPermission=self::loginUser() ){
             if(is_array($role)){
-                return array_intersect( $role, $loginUserPermission['role_names'] ) ? true : false;
+                return array_intersect( $role, $loginUserPermission['auth']['role_names'] ) ? true : false;
             }elseif ( is_string($role)){
-                return in_array( $role, $loginUserPermission['role_names'] );
+                return in_array( $role, $loginUserPermission['auth']['role_names'] );
             }
         }
         return false;
@@ -222,10 +222,8 @@ class AdminService
      * @return bool
      */
     public static function can(string $permission ){
-
-        $loginUserPermission=self::loginUser();
-        if($loginUserPermission ){
-            return in_array( $permission, $loginUserPermission['action_names'] );
+        if($loginUserPermission=self::loginUser() ){
+            return in_array( $permission, $loginUserPermission['auth']['action_names'] );
         }
         return false;
     }

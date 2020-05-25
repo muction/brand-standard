@@ -14,6 +14,6 @@ class BrandUnauthorizedException extends \Exception
      */
     public function __construct()
     {
-        parent::__construct( Error::REQUEST_FORBIDDENT_MSG,Error::REQUEST_FORBIDDENT_CODE );
+        parent::__construct( Error::REQUEST_UNAUTHORIZED_MSG,Error::REQUEST_UNAUTHORIZED_CODE );
     }
 }

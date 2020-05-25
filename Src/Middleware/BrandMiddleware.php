@@ -25,17 +25,27 @@ class BrandMiddleware
 
         //注入RequestId
         $request->offsetSet( 'RequestId' ,  makeRequestId() );
+
         //非白名单请求
         $routeName =$request->route() ? $request->route()->getName() : "";
         if( !in_array($routeName , configStandard('white_list_route_name') ))
         {
+            //唯一token
+            $requestToken =$request->header('Authorization');
+
+            //优先校验Token合法性，并注入登录者信息
+            $request->offsetSet( 'LoginUserInfo' ,  $this->getRequestUserInfo( $requestToken) );
+
             //权限校验
-            if(!AdminService::can( $routeName)){
-                throw new BrandForbiddentException();
+            if( !AdminService::hasRole('root') ){
+                if( !AdminService::can( $routeName) ){
+                    throw new BrandForbiddentException();
+                }
             }
+
             //刷新用户登录过期时间
-            Redis::expire( $request->header('Authorization'), configStandard('token_expire') );
-            // TODO 记录操作日志
+            Redis::expire( $requestToken , configStandard('token_expire') );
+
         }
         return $next($request);
     }
