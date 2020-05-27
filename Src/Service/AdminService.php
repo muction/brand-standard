@@ -21,7 +21,7 @@ class AdminService
     public function index( Request $request ){
 
         return RbacUser::orderByDesc('updated_at')
-            ->where('status', 1)
+            ->where('status', Error::STATUS_VALID )
             ->select(['id' ,'username' ,'created_at' ,'updated_at'])
             ->paginate( $request->input('size', 20 ) );
     }

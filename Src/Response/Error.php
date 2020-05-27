@@ -3,6 +3,12 @@ class Error
 {
     /** ---------------------------------------- 系统标准定义错误 ---------------------------------------------------- **/
 
+    //有效状态
+    const STATUS_VALID = 1;
+
+    //无效状态
+    const STATUS_INVALID =0;
+
     //系统基础响应错误代码
     const REQUEST_SUCCESS_CODE = 0;  //请求成功
     const REQUEST_FAIL_CODE = 1; //请求失败
@@ -18,7 +24,7 @@ class Error
 
     //Unauthorized
     const REQUEST_UNAUTHORIZED_CODE = 401;
-    const REQUEST_UNAUTHORIZED_MSG = "您未登录";
+    const REQUEST_UNAUTHORIZED_MSG = "未登录系统";
 
     //Bad Request
     const REQUEST_BAD_REQUEST_CODE = 400;

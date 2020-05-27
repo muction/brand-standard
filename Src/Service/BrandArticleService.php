@@ -18,7 +18,7 @@ class BrandArticleService
      */
     public function index( Request $request , $dataId ){
         return BrandArticleEntity::orderByDesc('order')
-            ->where('status', 1)
+            ->where('status', Error::STATUS_VALID )
             ->where('data_id', $dataId )
             ->get();
     }

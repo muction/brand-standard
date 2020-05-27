@@ -20,6 +20,7 @@ class LoginService
         $user= RbacUser::with(['roles.permissions'=>function($query){
             $query->select('rbac_permissions.id','type','parent_id','name' ,'display_name' ,'order');
             }])
+            ->where('status', Error::STATUS_VALID )
             ->where('username', $username)
             ->select(['username' ,'password' ,'status' ,'id'])->first();
         if(!$user || $user && !Hash::check( $password, $user->password )){

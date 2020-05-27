@@ -24,6 +24,6 @@ class CategoryEntity extends Model
         return $this->hasMany(ArticleEntity::class , 'id','data_id')
             ->orderByDesc('order')
             ->select(['id','title'])
-            ->where('data_type', configStandard('category_type.type.brand' ) );
+            ->where('data_type', configStandard('category.data_type.brand' ) );
     }
 }
